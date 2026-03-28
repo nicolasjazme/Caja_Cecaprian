@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Caja Bancaria Cecaprian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a5a96;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .main-section {
+            background-color: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .title {
+            text-align: center;
+            background-color: #c4a747;
+            color: #000;
+            padding: 15px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            font-size: 24px;
+            border-radius: 5px;
+        }
+
+        .menu-inicial {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-lista {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border: 2px solid #c4a747;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .menu-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #333;
+            border-left: 4px solid #c4a747;
+            border-radius: 3px;
+            font-size: 16px;
+            color: #c4a747;
+        }
+
+        .menu-item span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .input-codigo {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            background-color: #333;
+            color: #c4a747;
+            border: 2px solid #c4a747;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .input-codigo::placeholder {
+            color: #666;
+        }
+
+        .btn-ingresar {
+            background-color: #c4a747;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-ingresar:hover {
+            background-color: #d4b757;
+            box-shadow: 0 0 10px #c4a747;
+        }
+
+        .operaciones-section {
+            display: none;
+        }
+
+        .operaciones-section.active {
+            display: block;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar-button {
+            background-color: #c4a747;
+            color: #000;
+            border: 2px solid #8b8000;
+            padding: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 16px;
+            text-decoration: underline;
+        }
+
+        .sidebar-button:hover {
+            background-color: #d4b757;
+            box-shadow: 0 0 10px #c4a747;
+        }
+
+        .info-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border: 2px solid #c4a747;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .info-section.active {
+            display: block;
+        }
+
+        .info-section h3 {
+            color: #c4a747;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .info-section input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: #333;
+            color: #c4a747;
+            border: 1px solid #c4a747;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .btn-volver {
+            background-color: #666;
+            color: white;
+        }
+
+        .btn-volver:hover {
+            background-color: #888;
+        }
+
+        .tabla-efectivo {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+        }
+
+        .tabla-efectivo th,
+        .tabla-efectivo td {
+            border: 1px solid #c4a747;
+            padding: 12px;
+            text-align: center;
+            color: #000;
+        }
+
+        .tabla-efectivo th {
+            background-color: #333;
+            font-weight: bold;
+            color: #c4a747;
+        }
+
+        .tabla-efectivo input {
+            width: 100%;
+            padding: 8px;
+            background-color: #ffffff;
+            color: #000;
+            border: 1px solid #c4a747;
+            border-radius: 3px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tabla-billetes {
+            background-color: #144769;
+        }
+
+        .tabla-billetes th {
+            background-color: #144769;
+            color: white;
+        }
+
+        .tabla-billetes td {
+            border-color: #144769;
+        }
+
+        .tabla-monedas {
+            background-color: #d4a945;
+        }
+
+        .tabla-monedas th {
+            background-color: #b8931e;
+            color: white;
+        }
+
+        .tabla-monedas td {
+            border-color: #b8931e;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #333;
+        }
+
+        .titulo-tabla {
+            color: #c4a747;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="Logo.jpeg" alt="Logo Cecaprian">
+            <h2 style="color: #271f06;">CECAPRIAN</h2>
+        </div>
+
+        <div class="main-section">
+            <div id="menuInicial" class="menu-inicial">
+                <div class="title">Bienvenido</div>
+                
+                <div class="menu-lista">
+                    <div class="menu-item"><span>1:</span> Deposito en efectivo</div>
+                    <div class="menu-item"><span>2:</span> Deposito con documento</div>
+                    <div class="menu-item"><span>3:</span> Cobro de cheque</div>
+                    <div class="menu-item"><span>4:</span> Retiro de Cuenta</div>
+                    <div class="menu-item"><span>5:</span> Pago de Credito</div>
+                    <div class="menu-item"><span>6:</span> Pago de Tarjeta de Credito</div>
+                    <div class="menu-item"><span>7:</span> Pago de Servicio</div>
+                    <div class="menu-item"><span>8:</span> Cobro Vale Vista</div>
+                </div>
+
+                <input type="text" id="codigoInput" class="input-codigo" placeholder="Ingrese codigo (1-8)" maxlength="1">
+                <button class="btn-ingresar" onclick="ingresarCodigo()">INGRESAR</button>
+            </div>
+
+            <div id="operacionesSection" class="operaciones-section">
+                <div class="title" id="operacionTitle">OPERACION SELECCIONADA</div>
+                
+                <div class="info-section active">
+                    <h3 id="operationDescription">Descripcion de la operacion</h3>
+                    <input type="text" id="monto" placeholder="Ingrese monto" required>
+                    <input type="text" id="numeroCuenta" placeholder="Numero de cuenta" required>
+                    <button onclick="realizarOperacion()">CONFIRMAR</button>
+                    <button class="btn-volver" onclick="volverAlMenu()">VOLVER AL MENU</button>
+                </div>
+            </div>
+
+            <div id="saldoInicialSection" class="operaciones-section">
+                <div class="title">SALDO INICIAL</div>
+                
+                <div class="info-section active">
+                    <h3>Ingrese cantidad de billetes y monedas</h3>
+                    
+                    <div class="titulo-tabla">BILLETES PESOS</div>
+                    <table class="tabla-efectivo tabla-billetes">
+                        <tr>
+                            <th>DENOMINACION</th>
+                            <th>CANTIDAD</th>
+                            <th>MONTO</th>
+                        </tr>
+                        <tr>
+                            <td>$20.000</td>
+                            <td><input type="number" id="bill20000" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto20000">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$10.000</td>
+                            <td><input type="number" id="bill10000" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto10000">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$5.000</td>
+                            <td><input type="number" id="bill5000" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto5000">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$2.000</td>
+                            <td><input type="number" id="bill2000" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto2000">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$1.000</td>
+                            <td><input type="number" id="bill1000" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto1000">$0</span></td>
+                        </tr>
+                    </table>
+
+                    <div class="titulo-tabla">MONEDAS</div>
+                    <table class="tabla-efectivo tabla-monedas">
+                        <tr>
+                            <th>DENOMINACION</th>
+                            <th>CANTIDAD</th>
+                            <th>MONTO</th>
+                        </tr>
+                        <tr>
+                            <td>$500</td>
+                            <td><input type="number" id="mon500" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto500">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$100</td>
+                            <td><input type="number" id="mon100" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto100">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$50</td>
+                            <td><input type="number" id="mon50" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto50">$0</span></td>
+                        </tr>
+                        <tr>
+                            <td>$10</td>
+                            <td><input type="number" id="mon10" min="0" value="0" onchange="calcularTotal()"></td>
+                            <td><span id="monto10">$0</span></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="2">TOTAL</td>
+                            <td><span id="montoTotal">$0</span></td>
+                        </tr>
+                    </table>
+
+                    <button onclick="confirmarSaldoInicial()">CONFIRMAR</button>
+                    <button class="btn-volver" onclick="volverAlMenu()">VOLVER AL MENU</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <button class="sidebar-button" onclick="abrirCuadre()">CUADRE</button>
+            <button class="sidebar-button" onclick="abrirDineroRecibido()">DINERO RECIBIDO</button>
+            <button class="sidebar-button" onclick="abrirSaldo()">SALDO</button>
+            <button class="sidebar-button" onclick="abrirSaldoInicial()">SALDO INICIAL</button>
+            <button class="sidebar-button" onclick="abrirJournal()">JOURNAL</button>
+        </div>
+    </div>
+
+    <script>
+        let operacionSeleccionada = null;
+        let journal = [];
+        let dineroRecibidoEfectivo = 0;
+        let dineroRecibidoConDocumento = 0;
+        let dineroEntregado = 0;
+        let saldoActual = 0;
+
+        // Función para formatear dinero
+        function formatearDinero(valor, conDecimales = true) {
+            if (conDecimales) {
+                return '$ ' + valor.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                return '$ ' + Math.floor(valor).toLocaleString('es-AR');
+            }
+        }
+
+        const operaciones = {
+            1: { nombre: "DEPOSITO EN EFECTIVO", descripcion: "Registre el monto del deposito en efectivo" },
+            2: { nombre: "DEPOSITO CON DOCUMENTO", descripcion: "Registre el monto del deposito con documento" },
+            3: { nombre: "COBRO DE CHEQUE", descripcion: "Registre el monto del cheque a cobrar" },
+            4: { nombre: "RETIRO DE CUENTA", descripcion: "Registre el monto a retirar" },
+            5: { nombre: "PAGO DE CREDITO", descripcion: "Registre el monto del pago de credito" },
+            6: { nombre: "PAGO DE TARJETA DE CREDITO", descripcion: "Registre el monto del pago de tarjeta" },
+            7: { nombre: "PAGO DE SERVICIO", descripcion: "Registre el monto del pago de servicio" },
+            8: { nombre: "COBRO VALE VISTA", descripcion: "Registre el monto del vale vista a cobrar" }
+        };
+
+        function ingresarCodigo() {
+            const codigo = document.getElementById('codigoInput').value.trim();
+
+            if (!codigo || codigo < 1 || codigo > 8) {
+                alert("Por favor ingrese un codigo valido (1-8)");
+                return;
+            }
+
+            operacionSeleccionada = {
+                id: parseInt(codigo),
+                nombre: operaciones[codigo].nombre,
+                descripcion: operaciones[codigo].descripcion
+            };
+
+            document.getElementById('menuInicial').style.display = 'none';
+            document.getElementById('operacionesSection').classList.add('active');
+            document.getElementById('operacionTitle').textContent = operacionSeleccionada.nombre;
+            document.getElementById('operationDescription').textContent = operacionSeleccionada.descripcion;
+
+            document.getElementById('monto').value = '';
+            document.getElementById('numeroCuenta').value = '';
+            document.getElementById('monto').focus();
+        }
+
+        function realizarOperacion() {
+            const montoTexto = document.getElementById('monto').value;
+            // Limpiar el valor: remover $, espacios y puntos
+            const montoLimpio = montoTexto.replace(/\$/g, '').replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '.');
+            const monto = parseFloat(montoLimpio);
+            const cuenta = document.getElementById('numeroCuenta').value;
+
+            if (!monto || monto <= 0) {
+                alert("Por favor ingrese un monto valido");
+                return;
+            }
+
+            if (!cuenta.trim()) {
+                alert("Por favor ingrese un numero de cuenta");
+                return;
+            }
+
+            // Validar saldo suficiente para retiros y cobros
+            if ((operacionSeleccionada.id === 3 || operacionSeleccionada.id === 4 || operacionSeleccionada.id === 8) && monto > saldoActual) {
+                alert("NO TIENES SALDO SUFICIENTE");
+                return;
+            }
+
+            const timestamp = new Date().toLocaleString('es-AR');
+
+            const registro = {
+                operacion: operacionSeleccionada.nombre,
+                cuenta: cuenta,
+                monto: monto,
+                timestamp: timestamp
+            };
+
+            journal.push(registro);
+
+            if (operacionSeleccionada.id === 1) {
+                dineroRecibidoEfectivo += monto;
+                saldoActual += monto;
+            } else if (operacionSeleccionada.id === 2) {
+                dineroRecibidoConDocumento += monto;
+            } else if (operacionSeleccionada.id === 3 || operacionSeleccionada.id === 8) {
+                dineroEntregado += monto;
+                saldoActual -= monto;
+            } else if (operacionSeleccionada.id === 4) {
+                dineroEntregado += monto;
+                saldoActual -= monto;
+            } else if ([5, 6, 7].includes(operacionSeleccionada.id)) {
+                dineroRecibidoEfectivo += monto;
+                saldoActual += monto;
+            }
+
+            alert('Operacion: ' + operacionSeleccionada.nombre + '\nMonto: ' + formatearDinero(monto, false) + '\nCuenta: ' + cuenta + '\n\nOperacion registrada exitosamente');
+            volverAlMenu();
+        }
+
+        function volverAlMenu() {
+            operacionSeleccionada = null;
+            document.getElementById('menuInicial').style.display = 'flex';
+            document.getElementById('operacionesSection').classList.remove('active');
+            document.getElementById('codigoInput').value = '';
+            document.getElementById('codigoInput').focus();
+        }
+
+        function abrirCuadre() {
+            alert('CUADRE\n\nDinero Recibido en Efectivo: ' + formatearDinero(dineroRecibidoEfectivo, false) + '\nDinero Recibido con Documento: ' + formatearDinero(dineroRecibidoConDocumento, false) + '\nDinero Entregado: ' + formatearDinero(dineroEntregado, false) + '\nSaldo: ' + formatearDinero(saldoActual, false));
+        }
+
+        function abrirDineroRecibido() {
+            alert('DINERO RECIBIDO\n\nEn Efectivo: ' + formatearDinero(dineroRecibidoEfectivo, false) + '\nCon Documento: ' + formatearDinero(dineroRecibidoConDocumento, false) + '\nTotal: ' + formatearDinero(dineroRecibidoEfectivo + dineroRecibidoConDocumento, false));
+        }
+
+        function abrirDineroEntregado() {
+            alert('DINERO ENTREGADO\n\nTotal: ' + formatearDinero(dineroEntregado, false));
+        }
+
+        function abrirSaldo() {
+            alert('SALDO ACTUAL\n\n' + formatearDinero(saldoActual, false));
+        }
+
+        function abrirSaldoInicial() {
+            document.getElementById('menuInicial').style.display = 'none';
+            document.getElementById('saldoInicialSection').classList.add('active');
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            const denominaciones = {
+                bill20000: 20000,
+                bill10000: 10000,
+                bill5000: 5000,
+                bill2000: 2000,
+                bill1000: 1000,
+                mon500: 500,
+                mon100: 100,
+                mon50: 50,
+                mon10: 10
+            };
+
+            let total = 0;
+
+            for (let id in denominaciones) {
+                const cantidad = parseInt(document.getElementById(id).value) || 0;
+                const denominacion = denominaciones[id];
+                const monto = cantidad * denominacion;
+                
+                // Actualizar el monto en la tabla
+                const montoId = id.replace(/^bill|^mon/, 'monto');
+                document.getElementById(montoId).textContent = formatearDinero(monto, false);
+                
+                total += monto;
+            }
+
+            // Actualizar el total
+            document.getElementById('montoTotal').textContent = formatearDinero(total, false);
+        }
+
+        function confirmarSaldoInicial() {
+            const total = parseInt(document.getElementById('montoTotal').textContent.replace(/\$/g, '').replace(/\./g, ''));
+
+            if (!total || total <= 0) {
+                alert("Por favor ingrese cantidad de billetes o monedas");
+                return;
+            }
+
+            saldoActual = total;
+            alert('Saldo Inicial establecido: ' + formatearDinero(total, false));
+            document.getElementById('saldoInicialSection').classList.remove('active');
+            document.getElementById('menuInicial').style.display = 'flex';
+            document.getElementById('codigoInput').focus();
+        }
+
+        function abrirJournal() {
+            let journalText = "JOURNAL DE OPERACIONES\n\n";
+            if (journal.length === 0) {
+                journalText += "Sin operaciones registradas";
+            } else {
+                for (let i = 0; i < journal.length; i++) {
+                    journalText += (i + 1) + '. ' + journal[i].operacion + '\n   Cuenta: ' + journal[i].cuenta + '\n   Monto: ' + formatearDinero(journal[i].monto) + '\n   ' + journal[i].timestamp + '\n\n';
+                }
+            }
+            alert(journalText);
+        }
+
+        document.getElementById('codigoInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                ingresarCodigo();
+            }
+        });
+
+        // Formatear monto mientras se escribe
+        document.getElementById('monto').addEventListener('input', function(e) {
+            let valor = e.target.value.replace(/\$/g, '').replace(/\s/g, '').replace(/\./g, '');
+            
+            if (valor === '') {
+                e.target.value = '';
+                return;
+            }
+            
+            // Convertir a número y formatear
+            const numero = parseInt(valor) || 0;
+            const formateado = numero.toLocaleString('es-AR');
+            e.target.value = '$ ' + formateado;
+        });
+
+        window.onload = function() {
+            document.getElementById('codigoInput').focus();
+        };
+    </script>
+</body>
+</html>
